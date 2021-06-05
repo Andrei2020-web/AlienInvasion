@@ -23,6 +23,9 @@ class Settings():
         """Темп ускорения игры."""
         self.speedup_scale = 1.1
 
+        """Темп роcта стоимости пришельцев."""
+        self.score_scale = 1.5
+
         self.initialize_dynamic_settings()
 
     def initialize_dynamic_settings(self):
@@ -34,8 +37,12 @@ class Settings():
         # fleet_direction = 1 - движение вправо, -1 - движение влево.
         self.fleet_direction = 1
 
+        """Подсчет очков."""
+        self.alien_points = 50
+
     def increase_speed(self):
-        """Увеличивает настройки скорости."""
+        """Увеличивает настройки скорости и стоимости пришельцев."""
         self.ship_speed *= self.speedup_scale
         self.bullet_speed *= self.speedup_scale
         self.alien_speed *= self.speedup_scale
+        self.alien_points *= int(self.alien_points * self.speedup_scale)
