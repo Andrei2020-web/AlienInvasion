@@ -75,9 +75,15 @@ class AlienInvasion():
             self.sb.check_high_score()
 
         if not self.aliens:
-            """Cоздание нового флота."""
-            self._create_fleet()
-            self.settings.increase_speed()
+            self.start_new_level()
+
+    def start_new_level(self):
+        """Cоздание нового флота."""
+        self._create_fleet()
+        self.settings.increase_speed()
+        """Увеличение уровня."""
+        self.stats.level += 1
+        self.sb.prep_level()
 
     def _update_aliens(self):
         """Проверяет, достиг ли флот края экрана, с последующим обновлением
@@ -132,7 +138,7 @@ class AlienInvasion():
             """Сброс игровой статистики."""
             self.stats.reset_stats()
             self.stats.game_active = True
-            self.sb.prep_score()
+            self.prep_images()
 
             """Очистка списков пришельцев и снарядов."""
             self.aliens.empty()
@@ -144,6 +150,11 @@ class AlienInvasion():
 
             """Скрыть указатель мыши."""
             pygame.mouse.set_visible(False)
+
+    def prep_images(self):
+        self.sb.prep_score()
+        self.sb.prep_level()
+        self.sb.prep_ships()
 
     def _check_keyup_events(self, event):
         if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
@@ -213,8 +224,9 @@ class AlienInvasion():
     def _ship_hit(self):
         """Обрабатывает столкновение корабля с пришельем."""
         if self.stats.ship_left > 0:
-            """Уменьшение ship_left."""
+            """Уменьшение ship_left и обновить кол-во жизней на экране."""
             self.stats.ship_left -= 1
+            self.sb.prep_ships()
 
             """Очистка списков пришельцев и снарядов."""
             self.aliens.empty()
